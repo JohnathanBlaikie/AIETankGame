@@ -72,17 +72,19 @@ namespace ConsoleApp1
             }
             if (IsKeyDown(KeyboardKey.KEY_W))
             {
-                Vector3 facing = new Vector3(
-                    tankObject.LocalTransform.m1, 
-                    tankObject.LocalTransform.m2, 1) * deltaTime * 100;
+                MathHelpers.Vector3 facing = new MathHelpers.Vector3(
+                    tankObject.LocalTransform.m[0],
+                    tankObject.LocalTransform.m[1], 1) * deltaTime * 100;
                 tankObject.Translate(facing.x, facing.y);
+                Vector3 sv = facing.rV3();
             }
             if (IsKeyDown(KeyboardKey.KEY_S))
             {
-                Vector3 facing = new Vector3(
-                    tankObject.LocalTransform.m1, 
-                    tankObject.LocalTransform.m2, 1) * deltaTime * -100;
+                MathHelpers.Vector3 facing = new MathHelpers.Vector3(
+                    tankObject.LocalTransform.m[0],
+                    tankObject.LocalTransform.m[1], 1) * deltaTime * -100;
                 tankObject.Translate(facing.x, facing.y);
+                Vector3 sv = facing.rV3();
             }
             if (IsKeyDown(KeyboardKey.KEY_Q))
             {
@@ -93,7 +95,7 @@ namespace ConsoleApp1
                 turretObject.Rotate(deltaTime);
             }
             tankObject.Update(deltaTime);
-            
+
             lastTime = currentTime;
         }
 
