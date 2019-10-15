@@ -38,9 +38,14 @@ namespace ConsoleApp1
         }
         public override void OnDraw()
         {
-            float rotation = (float)Math.Atan2(globalTransform.m[0], globalTransform.m[1]);
+            //float rotation = (float)Math.Atan2(globalTransform.m[0], globalTransform.m[1]);
             
-            DrawTextureEx(texture, new Vector2(globalTransform.m[6], globalTransform.m[7]),
+            //DrawTextureEx(texture, new Vector2(globalTransform.m[6], globalTransform.m[7]),
+            //    rotation * (float)(180.0f / Math.PI), 1, Color.WHITE);
+
+            float rotation = (float)Math.Atan2(globalTransform.m1, globalTransform.m2);
+
+            DrawTextureEx(texture, new Vector2(globalTransform.m7, globalTransform.m8),
                 rotation * (float)(180.0f / Math.PI), 1, Color.WHITE);
         }
     }

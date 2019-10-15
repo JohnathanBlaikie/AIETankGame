@@ -52,7 +52,7 @@ namespace ConsoleApp1
 
         public void Rotate(float radians)
         {
-            localTransform.SetRotateZ(radians);
+            localTransform.RotateZ(radians);
             UpdateTransform();
         }
 
