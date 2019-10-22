@@ -6,6 +6,8 @@ namespace ConsoleApp1
 {
     class OldCompCode
     {
+        #region original code
+        #region original matrix3 code
         //ORIGINAL MATRIX3 CODE
         //public class Matrix3
         //{
@@ -151,7 +153,9 @@ namespace ConsoleApp1
         //            );
         //    }
         //}
+        #endregion origional matrix3 code
 
+        #region everything but matrix3
         //public v2 GetPerpRH()
         //{
         //    return { -y, x};
@@ -265,12 +269,12 @@ namespace ConsoleApp1
         //        return $"{v[0]} {v[1]} {v[2]}";
         //    }
         //}
-    
-        
+        #endregion everything but matrix3
+        #endregion original code
         //END OLD CODE
 
 
-
+        #region Teacher code
         ///<summary>
         ///Working code from teacher
         /// </summary>
@@ -479,6 +483,7 @@ namespace ConsoleApp1
         //        Set(z * y * x);
         //    }
         //}
+        #endregion Teacher code
     }
 
 }
