@@ -23,7 +23,7 @@
     <None Update="tankBlue_outline.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TankGameMissile.png">
+    <None Update="TankGameShell.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

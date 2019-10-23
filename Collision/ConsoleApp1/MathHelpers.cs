@@ -1248,7 +1248,12 @@ namespace MathHelpers
             this.center = p;
             this.radius = r;
         }
+        public void Resize(Vector3 c, float r)
+        {
+            this.center = c;
+            this.radius = r;
 
+        }
         public bool Overlaps(Vector3 p)
         {
             Vector3 toPoint = p - center;

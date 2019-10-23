@@ -18,13 +18,16 @@ namespace ConsoleApp1
         private int frames;
 
         private float deltaTime = 0.005f;
+
+        List<SceneObject> Hierarchy = new List<SceneObject>();
+
         SceneObject tankObject = new SceneObject();
         SceneObject turretObject = new SceneObject();
-        SceneObject missileObject = new SceneObject();
+        SceneObject shellObject = new SceneObject();
 
         SpriteObject tankSprite = new SpriteObject();
         SpriteObject turretSprite = new SpriteObject();
-        SpriteObject missileSprite = new SpriteObject();
+        SpriteObject shellSprite = new SpriteObject();
 
         Timer bruh = new Timer();
 
@@ -36,14 +39,17 @@ namespace ConsoleApp1
         MathHelpers.Vector3[] pCA = new MathHelpers.Vector3[4];
 
         Color boxColor = Color.GREEN;
-        MathHelpers.AABB boxCollider = new MathHelpers.AABB(new MathHelpers.Vector3(120, 120, 0), new MathHelpers.Vector3(200, 200, 0));
+        MathHelpers.AABB boxCollider = new MathHelpers.AABB(new MathHelpers.Vector3(300, 300, 0), new MathHelpers.Vector3(400, 400, 0));
 
         public void Init()
         {
             SetTargetFPS(60);
-
             stopwatch.Start();
             lastTime = stopwatch.ElapsedMilliseconds;
+
+            Hierarchy.Add(shellObject);
+            Hierarchy.Add(tankObject);
+
 
             tankSprite.Load("tankblue_outline.png");
             //tankSprite.SetRotate(-90 * (float)(Math.PI / 180.0f));
@@ -54,6 +60,8 @@ namespace ConsoleApp1
             //turretSprite.SetRotate(-90 * (float)(Math.PI / 180.0f));
             //turretSprite.SetPosition(turretSprite.Width / 2.0f, 0);
             turretSprite.SetPosition(25, 0);
+
+            shellSprite.Load("TankGameshell.png");
 
 
             turretObject.AddChild(turretSprite);
@@ -123,26 +131,68 @@ namespace ConsoleApp1
             {
                 turretObject.Rotate(deltaTime);
             }
-            if (IsKeyDown(KeyboardKey.KEY_SPACE))
-            {
-                MathHelpers.Vector3 facing = new MathHelpers.Vector3 (
-                    tankObject.LocalTransform.m1,
-                    tankObject.LocalTransform.m2, 1) *deltaTime * -1000;
-                tankObject.Translate(facing.x, facing.y);
-            }
-            
-            tankObject.UpdateTransform();
-            tankObject.Update(deltaTime);
             #endregion Movement
+
+            if (IsKeyPressed(KeyboardKey.KEY_SPACE))
+            {
+                Projectile shell = new Projectile(turretObject.GlobalTransform.m5, -turretObject.GlobalTransform.m4);
+                shell.SetPosition(turretObject.GlobalTransform.m7, turretObject.GlobalTransform.m8);
+                shellObject.AddChild(shell);
+
+
+                //MathHelpers.Vector3 facing = new MathHelpers.Vector3 (
+                //    tankObject.LocalTransform.m1,
+                //    tankObject.LocalTransform.m2, 1) *deltaTime * -1000;
+                //tankObject.Translate(facing.x, facing.y);
+            }
+
+            if (boxCollider.Overlaps(playerCollider))
+                boxColor = Color.DARKGREEN;
+            else
+                boxColor = Color.GREEN;
+
+            for (int i = 0; i < shellObject.GetChildCount(); i++)
+            {
+                if(shellObject.GetChild(i).proDel)
+                {
+                    shellObject.RemoveChild(shellObject.GetChild(i));
+
+                }
+            }
+            for (int i = 0; i < shellObject.GetChildCount(); i++)
+            {
+                Projectile tShell = (Projectile)shellObject.GetChild(i);
+                if (!boxCollider.Overlaps(playerCollider))
+                {
+                    if(tShell.projectileCollider.Overlaps(boxCollider))
+                    {
+                        boxColor = Color.RED;
+                        break;
+                    }
+                    else
+                    {
+                        boxColor = Color.GREEN;
+                    }
+                }
+            }
+
+            tankObject.UpdateTransform();
+            //tankObject.Update(deltaTime);
+
+            
 
             playerCollider.Resize(new MathHelpers.Vector3(tankObject.GlobalTransform.m7 - (tankSprite.Width / 2), tankObject.GlobalTransform.m8 - (tankSprite.Height / 2), 0),
                                   new MathHelpers.Vector3(tankObject.GlobalTransform.m7 + (tankSprite.Width / 2), tankObject.GlobalTransform.m8 + (tankSprite.Height / 2), 0));
             //DrawRectangle(90, 90, 90, 10, Color.RED);
             Vector2 v2 = new Vector2(900, 24);
             //DrawLineStrip(ref v2, 255, Color.VIOLET);
-
-
             lastTime = currentTime;
+
+            foreach (SceneObject i in Hierarchy)
+            {
+                i.Update(deltaTime);
+            }
+
         }
 
 
@@ -153,7 +203,18 @@ namespace ConsoleApp1
             ClearBackground(Color.WHITE);
             DrawText(fps.ToString(), 10, 10, 12, Color.RED);
 
-            tankObject.Draw();
+            //MathHelpers.AABB boxCollider = new MathHelpers.AABB(new MathHelpers.Vector3(120, 120, 0), new MathHelpers.Vector3(200, 200, 0));
+            //boxCollider.Corners();
+
+            DrawRectangle(300, 300, 100, 100, boxColor);
+
+
+            foreach (SceneObject i in Hierarchy)
+            {
+                i.Draw();
+            }
+
+            //tankObject.Draw();
             EndDrawing();
         }
     }
